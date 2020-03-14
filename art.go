@@ -6,12 +6,18 @@ import (
 )
 
 // Fetch cover art: Use itemID = 0 for currently playing
-func (instance *vlc) Art(itemID int) (byteArr []byte, statusCode int, err error) {
+func (instance *vlc) Art(itemID ...int) (byteArr []byte, statusCode int, err error) {
+
+	// Check variadic arguments
+	if len(itemID) > 1 {
+		err = errors.New("please provide only up to one ID")
+		return
+	}
 
 	// Build request URL
 	urlSegment := "/art"
-	if itemID != 0 {
-		urlSegment = urlSegment + "?item=" + strconv.Itoa(itemID)
+	if len(itemID) == 1 {
+		urlSegment = urlSegment + "?item=" + strconv.Itoa(itemID[0])
 	}
 
 	// Make request

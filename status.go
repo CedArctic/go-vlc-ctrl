@@ -1,20 +1,44 @@
 package vlcctrl
 
+import (
+	"errors"
+	"strconv"
+)
+
 // Status
 func (instance *vlc) Status() (response string, statusCode int, err error) {
 	response, _, statusCode, err = instance.RequestMaker("/requests/status." + instance.Format)
 	return
 }
 
-// Play
-func (instance *vlc) Play() (response string, statusCode int, err error) {
-	response, _, statusCode, err = instance.RequestMaker("/requests/status." + instance.Format + "?command=pl_play")
+// Play playlist item with given id. If id is omitted, play last active item
+func (instance *vlc) Play(itemID ...int) (response string, statusCode int, err error) {
+	// Check variadic arguments and form urlSegment
+	if len(itemID) > 1 {
+		err = errors.New("please provide only up to one ID")
+		return
+	}
+	urlSegment := "/requests/status." + instance.Format + "?command=pl_play"
+	if len(itemID) == 1 {
+		urlSegment = urlSegment + "&id=" + strconv.Itoa(itemID[0])
+	}
+	response, _, statusCode, err = instance.RequestMaker(urlSegment)
 	return
 }
 
-// Pause
-func (instance *vlc) Pause() (response string, statusCode int, err error) {
-	response, _, statusCode, err = instance.RequestMaker("/requests/status." + instance.Format + "?command=pl_pause")
+// Pause: If current state was 'stop', play item with given id, if no id specified, play current item.
+// If no current item, play 1st item in the playlist.
+func (instance *vlc) Pause(itemID ...int) (response string, statusCode int, err error) {
+	// Check variadic arguments and form urlSegment
+	if len(itemID) > 1 {
+		err = errors.New("please provide only up to one ID")
+		return
+	}
+	urlSegment := "/requests/status." + instance.Format + "?command=pl_pause"
+	if len(itemID) == 1 {
+		urlSegment = urlSegment + "&id=" + strconv.Itoa(itemID[0])
+	}
+	response, _, statusCode, err = instance.RequestMaker(urlSegment)
 	return
 }
 

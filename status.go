@@ -89,3 +89,29 @@ func (instance *vlc) ToggleFullscreen() (response string, statusCode int, err er
 	response, _, statusCode, err = instance.RequestMaker("/requests/status." + instance.Format + "?command=fullscreen")
 	return
 }
+
+// Add URI to playlist and start playback. the option field is optional, and can have the values: noaudio, novideo
+// URI string is expected to be percent-encoded like URLs
+func (instance *vlc) AddStart(uri string, option ...string) (response string, statusCode int, err error) {
+	// Check variadic arguments and form urlSegment
+	if len(option) > 1 {
+		err = errors.New("please provide only one option")
+		return
+	}
+	urlSegment := "/requests/status." + instance.Format + "?command=in_play&input=" + uri
+	if len(option) == 1 {
+		if (option[0] != "noaudio") && (option[0] != "novideo") {
+			err = errors.New("invalid option")
+			return
+		}
+		urlSegment = urlSegment + "&option=" + option[0]
+	}
+	response, _, statusCode, err = instance.RequestMaker(urlSegment)
+	return
+}
+
+// Add URI to playlist. URI string is expected to be percent-encoded like URLs
+func (instance *vlc) Add(uri string) (response string, statusCode int, err error) {
+	response, _, statusCode, err = instance.RequestMaker("/requests/status." + instance.Format + "?command=in_enqueue&input=" + uri)
+	return
+}

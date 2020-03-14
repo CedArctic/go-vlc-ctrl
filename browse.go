@@ -1,6 +1,6 @@
 package vlcctrl
 
-// Browse directory
+// Browse directory based on its URI. URI is expected to be percent encoded
 func (instance *vlc) Browse(uri string) (response string, statusCode int, err error) {
 	response, _, statusCode, err = instance.RequestMaker("/requests/browse." + instance.Format + "?uri=" + uri)
 	return

@@ -19,12 +19,13 @@ type vlc struct {
 	Port     int
 	Password string
 	BaseURL  string
+	Format   string // json or xml
 }
 
 // ===== Functions =====
 
 // Create a new VLC instance to control
-func NewVLC(IP string, Port int, Password string) vlc {
+func NewVLC(IP string, Port int, Password string, Format string) vlc {
 
 	// Form instance Base URL
 	var BaseURL strings.Builder
@@ -32,36 +33,36 @@ func NewVLC(IP string, Port int, Password string) vlc {
 	BaseURL.WriteString(IP)
 	BaseURL.WriteString(":")
 	BaseURL.WriteString(strconv.Itoa(Port))
-	BaseURL.WriteString("/requests/")
 
 	// Create and return instance struct
-	return vlc{IP, Port, Password, BaseURL.String()}
+	return vlc{IP, Port, Password, BaseURL.String(), Format}
 }
 
 // Function used to make requests to VLC using a urlSegment
-func (instance *vlc) RequestMaker(urlSegment string) (response string, statusCode int, err error) {
-	// Make a GET Request
+func (instance *vlc) RequestMaker(urlSegment string) (response string, byteArr []byte, statusCode int, err error) {
+
+	// Form a GET Request
 	client := &http.Client{}
 	request, reqErr := http.NewRequest("GET", instance.BaseURL+urlSegment, nil)
+	if reqErr != nil {
+		err = errors.New(fmt.Sprintf("http request error: %s\n", reqErr))
+		return
+	}
+
+	// Make a GET request
 	request.SetBasicAuth("", instance.Password)
 	reqResponse, resErr := client.Do(request)
+	if resErr != nil {
+		err = errors.New(fmt.Sprintf("http response error: %s\n", reqErr))
+		return
+	}
+	defer reqResponse.Body.Close()
 
 	// Get byte response and http status code
-	byteArr, readErr := ioutil.ReadAll(reqResponse.Body)
-
-	// Error handling
-	if reqErr != nil {
-		err = errors.New(fmt.Sprintf("HTTP request error: %s\n", reqErr))
-		return
-	}
-
-	if resErr != nil {
-		err = errors.New(fmt.Sprintf("HTTP response error: %s\n", reqErr))
-		return
-	}
-
+	var readErr error
+	byteArr, readErr = ioutil.ReadAll(reqResponse.Body)
 	if readErr != nil {
-		err = errors.New(fmt.Sprintf("Error reading response: %s\n", reqErr))
+		err = errors.New(fmt.Sprintf("error reading response: %s\n", reqErr))
 		return
 	}
 
@@ -69,17 +70,5 @@ func (instance *vlc) RequestMaker(urlSegment string) (response string, statusCod
 	response = string(byteArr)
 	statusCode = reqResponse.StatusCode
 
-	return
-}
-
-// Play
-func (instance *vlc) Play() (response string, statusCode int, err error) {
-	response, statusCode, err = instance.RequestMaker("status.json?command=pl_play")
-	return
-}
-
-// Pause
-func (instance *vlc) Pause() (response string, statusCode int, err error) {
-	response, statusCode, err = instance.RequestMaker("status.json?command=pl_pause")
 	return
 }

@@ -1,5 +1,5 @@
 <div align="center">
-    <img src="https://raw.githubusercontent.com/cedarctic/go-vlc-ctrl/master/img/logo.png" width="140px" alt="logo"/>
+    <img src="https://github.com/CedArctic/go-vlc-ctrl/blob/master/img/logo.png" width="140px" alt="logo"/>
 </div>
 
 
@@ -71,4 +71,4 @@ Contributions to the project in any way are welcome
 - https://github.com/videolan/vlc/blob/master/share/lua/http/requests/README.txt
 
 ## License
-Copyright (c) 2020 CedArctic. This project is licensed under the [MIT license](LICENSE.md).
+Copyright (c) 2020 CedArctic. This project is licensed under the [MIT license](LICENSE).

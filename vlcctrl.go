@@ -1,7 +1,5 @@
 package vlcctrl
 
-// ===== Imports =====
-
 import (
 	"errors"
 	"fmt"
@@ -11,34 +9,37 @@ import (
 	"strings"
 )
 
-// ===== Structures =====
-
-// Structure for an http interface enabled VLC instance
+// The VLC struct represents an http interface enabled VLC instance. Build using NewVLC()
 type VLC struct {
 	IP       string
 	Port     int
 	Password string
-	BaseURL  string
+	BaseURL  string // combination of IP and Port
 	Format   string // json or xml
 }
 
-// ===== Functions =====
+// NewVLC() builds and returns a VLC struct using the IP, Port and Password of the VLC instance as well as the format
+// in which responses will be returned: xml or json
+func NewVLC(ip string, port int, password string, format string) (VLC, error) {
 
-// Create a new VLC instance to control
-func NewVLC(IP string, Port int, Password string, Format string) VLC {
+	// Check if format is invalid
+	if (format != "xml") && (format != "json") {
+		err := errors.New("format can only be json or xml")
+		return VLC{}, err
+	}
 
 	// Form instance Base URL
 	var BaseURL strings.Builder
 	BaseURL.WriteString("http://")
-	BaseURL.WriteString(IP)
+	BaseURL.WriteString(ip)
 	BaseURL.WriteString(":")
-	BaseURL.WriteString(strconv.Itoa(Port))
+	BaseURL.WriteString(strconv.Itoa(port))
 
 	// Create and return instance struct
-	return VLC{IP, Port, Password, BaseURL.String(), Format}
+	return VLC{ip, port, password, BaseURL.String(), format}, nil
 }
 
-// Function used to make requests to VLC using a urlSegment
+// RequestMaker make requests to VLC using a urlSegment provided by other functions
 func (instance *VLC) RequestMaker(urlSegment string) (response string, byteArr []byte, statusCode int, err error) {
 
 	// Form a GET Request

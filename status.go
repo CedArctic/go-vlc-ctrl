@@ -6,12 +6,11 @@ import (
 )
 
 // Status : Returns information of the instances' status. Among them:
-// Get VLC status information, current item info and meta
-// Get VLC version, and http api version
-// Displays the equalizer band gains:
-//     Band 0: 60 Hz, 1: 170 Hz, 2: 310 Hz, 3: 600 Hz, 4: 1 kHz,
-//     5: 3 kHz, 6: 6 kHz, 7: 12 kHz , 8: 14 kHz , 9: 16 kHz
-// Displays the list of presets available for the equalizer
+//     VLC status information, current item info and meta, VLC version and http api version
+//     Displays the equalizer band gains:
+//         Band 0: 60 Hz, 1: 170 Hz, 2: 310 Hz, 3: 600 Hz, 4: 1 kHz,
+//         5: 3 kHz, 6: 6 kHz, 7: 12 kHz , 8: 14 kHz , 9: 16 kHz
+//     Displays the list of presets available for the equalizer
 func (instance *VLC) Status() (response string, statusCode int, err error) {
 	response, _, statusCode, err = instance.RequestMaker("/requests/status." + instance.Format)
 	return
@@ -48,7 +47,7 @@ func (instance *VLC) Pause(itemID ...int) (response string, statusCode int, err 
 	return
 }
 
-// Stop
+// Stop Playback
 func (instance *VLC) Stop() (response string, statusCode int, err error) {
 	response, _, statusCode, err = instance.RequestMaker("/requests/status." + instance.Format + "?command=pl_stop")
 	return
@@ -90,14 +89,13 @@ func (instance *VLC) ToggleRandom() (response string, statusCode int, err error)
 	return
 }
 
-// Playback Repeat Toggle
+// Fullscreen Toggle
 func (instance *VLC) ToggleFullscreen() (response string, statusCode int, err error) {
 	response, _, statusCode, err = instance.RequestMaker("/requests/status." + instance.Format + "?command=fullscreen")
 	return
 }
 
-// Add URI to playlist and start playback. the option field is optional, and can have the values: noaudio, novideo
-// URI string is expected to be percent-encoded like URLs
+// Add URI to playlist and start playback. The option field is optional, and can have the values: noaudio, novideo
 func (instance *VLC) AddStart(uri string, option ...string) (response string, statusCode int, err error) {
 	// Check variadic arguments and form urlSegment
 	if len(option) > 1 {
@@ -116,13 +114,13 @@ func (instance *VLC) AddStart(uri string, option ...string) (response string, st
 	return
 }
 
-// Add URI to playlist. URI string is expected to be percent-encoded like URLs
+// Add URI to playlist
 func (instance *VLC) Add(uri string) (response string, statusCode int, err error) {
 	response, _, statusCode, err = instance.RequestMaker("/requests/status." + instance.Format + "?command=in_enqueue&input=" + uri)
 	return
 }
 
-// Add subtitle to currently playing file
+// Add subtitle from URI to currently playing file
 func (instance *VLC) AddSubtitle(uri string) (response string, statusCode int, err error) {
 	response, _, statusCode, err = instance.RequestMaker("/requests/status." + instance.Format + "?command=addsubtitle&val=" + uri)
 	return
@@ -168,16 +166,16 @@ func (instance *VLC) PlaybackRate(rate float64) (response string, statusCode int
 	return
 }
 
-// Set aspect ratio. Must be one of the following values. Any other value will reset aspect ratio to default
+// Set aspect ratio. Must be one of the following values. Any other value will reset aspect ratio to default.
 // Valid aspect ratio values: 1:1 , 4:3 , 5:4 , 16:9 , 16:10 , 221:100 , 235:100 , 239:100
 func (instance *VLC) AspectRatio(ratio string) (response string, statusCode int, err error) {
 	response, _, statusCode, err = instance.RequestMaker("/requests/status." + instance.Format + "?command=aspectratio&val=" + ratio)
 	return
 }
 
-// Sort playlist using sort mode <val> and order <id>
-// If id=0 then items will be sorted in normal order, if id=1 they will be sorted in reverse order
-// A non exhaustive list of sort modes: 0 Id, 1 Name, 3 Author, 5 Random, 7 Track number
+// Sort playlist using sort mode <val> and order <id>.
+// If id=0 then items will be sorted in normal order, if id=1 they will be sorted in reverse order.
+// A non exhaustive list of sort modes: 0 Id, 1 Name, 3 Author, 5 Random, 7 Track number.
 func (instance *VLC) Sort(id int, val int) (response string, statusCode int, err error) {
 	if (id != 0) && (id != 1) {
 		err = errors.New("sorting order must be 0 or 1")
@@ -187,7 +185,7 @@ func (instance *VLC) Sort(id int, val int) (response string, statusCode int, err
 	return
 }
 
-// Toggle enable service discovery module <val>
+// Toggle enable service discovery module <val>.
 // Typical values are: sap shoutcast, podcast, hal
 func (instance *VLC) ToggleSD(val string) (response string, statusCode int, err error) {
 	response, _, statusCode, err = instance.RequestMaker("/requests/status." + instance.Format + "?command=pl_sd&val=" + val)
@@ -202,7 +200,7 @@ func (instance *VLC) Volume(val string) (response string, statusCode int, err er
 }
 
 // Seek to <val>
-//   Allowed values are of the form:
+//  Allowed values are of the form:
 //    [+ or -][<int><H or h>:][<int><M or m or '>:][<int><nothing or S or s or ">]
 //    or [+ or -]<int>%
 //    (value between [ ] are optional, value between < > are mandatory)

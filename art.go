@@ -5,7 +5,8 @@ import (
 	"strconv"
 )
 
-// Fetch cover art: Use itemID = 0 for currently playing
+// Art fetches cover art based on a playlist item's ID.
+// If no ID is provided, Art returns the cover art for the current item.
 func (instance *VLC) Art(itemID ...int) (byteArr []byte, statusCode int, err error) {
 
 	// Check variadic arguments

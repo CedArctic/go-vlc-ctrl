@@ -33,7 +33,7 @@ func main(){
 	myVLC, _ := vlcctrl.NewVLC("127.0.0.1", 8080, "password", "json")
 
 	// Add items to playlist -  Note URIs are URL percent-encoded
-	myVLC.Add("file:///C:/Users/Jose/Music/Back%20In%20Black.mp3")
+	myVLC.Add("file:///C:/Users/Jose/Music/Back%%20In%%20Black.mp3")
 	myVLC.Add("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
 	myVLC.Add("file:///C:/Users/Jose/Videos/GameOfThronesS01E01.mp4")
 

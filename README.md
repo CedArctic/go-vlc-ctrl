@@ -8,6 +8,7 @@
 [![godoc reference](https://img.shields.io/badge/godoc-reference-blue?logo=)](https://godoc.org/github.com/CedArctic/go-vlc-ctrl)
 [![go report card](https://goreportcard.com/badge/github.com/CedArctic/go-vlc-ctrl)](https://goreportcard.com/report/github.com/CedArctic/go-vlc-ctrl)
 [![GitHub license](https://img.shields.io/github/license/CedArctic/go-vlc-ctrl)](https://github.com/CedArctic/go-vlc-ctrl/blob/master/LICENSE)
+[![release](https://img.shields.io/github/v/release/CedArctic/go-vlc-ctrl?color=orange)](https://github.com/CedArctic/go-vlc-ctrl/releases/latest)
 
 A simple yet powerful module that allows you to control VLC instances over the VLC Web API. 
 

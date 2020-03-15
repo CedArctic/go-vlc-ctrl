@@ -5,7 +5,7 @@
 
 # go-vlc-ctrl : Control VLC with Go
 [![go.dev reference](https://img.shields.io/badge/go.dev-reference-%2300ADD8?logo=go)](https://pkg.go.dev/github.com/CedArctic/go-vlc-ctrl)
-[![godoc reference](https://img.shields.io/badge/godoc-reference-blue?logo=)](https://pkg.go.dev/github.com/CedArctic/go-vlc-ctrl)
+[![godoc reference](https://img.shields.io/badge/godoc-reference-blue?logo=)](https://godoc.org/github.com/CedArctic/go-vlc-ctrl)
 [![go report card](https://goreportcard.com/badge/github.com/CedArctic/go-vlc-ctrl)](https://goreportcard.com/report/github.com/CedArctic/go-vlc-ctrl)
 [![GitHub license](https://img.shields.io/github/license/CedArctic/go-vlc-ctrl)](https://github.com/CedArctic/go-vlc-ctrl/blob/master/LICENSE)
 

@@ -6,7 +6,7 @@ import (
 )
 
 // Fetch cover art: Use itemID = 0 for currently playing
-func (instance *vlc) Art(itemID ...int) (byteArr []byte, statusCode int, err error) {
+func (instance *VLC) Art(itemID ...int) (byteArr []byte, statusCode int, err error) {
 
 	// Check variadic arguments
 	if len(itemID) > 1 {

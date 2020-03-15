@@ -14,7 +14,7 @@ import (
 // ===== Structures =====
 
 // Structure for an http interface enabled VLC instance
-type vlc struct {
+type VLC struct {
 	IP       string
 	Port     int
 	Password string
@@ -25,7 +25,7 @@ type vlc struct {
 // ===== Functions =====
 
 // Create a new VLC instance to control
-func NewVLC(IP string, Port int, Password string, Format string) vlc {
+func NewVLC(IP string, Port int, Password string, Format string) VLC {
 
 	// Form instance Base URL
 	var BaseURL strings.Builder
@@ -35,11 +35,11 @@ func NewVLC(IP string, Port int, Password string, Format string) vlc {
 	BaseURL.WriteString(strconv.Itoa(Port))
 
 	// Create and return instance struct
-	return vlc{IP, Port, Password, BaseURL.String(), Format}
+	return VLC{IP, Port, Password, BaseURL.String(), Format}
 }
 
 // Function used to make requests to VLC using a urlSegment
-func (instance *vlc) RequestMaker(urlSegment string) (response string, byteArr []byte, statusCode int, err error) {
+func (instance *VLC) RequestMaker(urlSegment string) (response string, byteArr []byte, statusCode int, err error) {
 
 	// Form a GET Request
 	client := &http.Client{}

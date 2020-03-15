@@ -19,6 +19,14 @@ go get github.com/adrg/libvlc-go/v3
 ```
 
 ## Example
+To run this example, enable the VLC Web Interface (View > Add Interface > Web) and make sure it has a password set to
+"password" (Preferences > All > Main interfaces > Lua > Lua HTTP > Password). 
+
+Alternatively you can launch VLC with a Web Interface from the command prompt / terminal 
+(use macosx instead of qt if on macOS):
+```bash
+vlc --intf http --extraintf qt --http-password password
+```
 ```go
 package main
 
@@ -28,15 +36,12 @@ import (
 )
 
 func main(){
-
-	// Create an instance connected to the local VLC. 
-	// Password of local instance is "password" and we choose to get responses in json
+	// Create instance of local VLC. Password is "password" and responses will be in json
 	myVLC, _ := vlcctrl.NewVLC("127.0.0.1", 8080, "password", "json")
 
 	// Add items to playlist -  Note URIs are URL percent-encoded
 	myVLC.Add("file:///C:/Users/Jose/Music/Back%%20In%%20Black.mp3")
 	myVLC.Add("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
-	myVLC.Add("file:///C:/Users/Jose/Videos/GameOfThronesS01E01.mp4")
 
 	// Play first item for 10 seconds
 	myVLC.Play()
@@ -58,8 +63,8 @@ You can find documentation of all functions on [Go.dev](https://pkg.go.dev/githu
 The module fully covers the VLC Web API as documented 
 [here](https://github.com/videolan/vlc/blob/master/share/lua/http/requests/README.txt).
 
-All functions a common return signature: ```(response string, statusCode int, err error)```. The response string is
-the server response (in json or xml) to the request made, statusCode is the HTTP Status Code (e.g: 200-OK) and err 
+All functions share a common return signature: ```(response string, statusCode int, err error)```. The response string 
+is the server response (in json or xml) to the request made, statusCode is the HTTP Status Code (e.g: 200-OK) and err 
 contains errors encountered during the execution of the function.
 
 ## Contributing

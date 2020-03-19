@@ -29,9 +29,9 @@ func (instance *VLC) Browse(uri string) (response string, statusCode int, err er
 	return
 }
 
-// ParseBrowse parses Browse() responses to []Element.
-//TODO: For now only json responses are supported. Add XML parsing
+// ParseBrowse parses Browse() responses to []Element
 func ParseBrowse(browseResponse string) (files []Element, err error) {
+	// TODO: For now only json responses are supported. Add XML parsing
 	var browse Browse
 	err = json.Unmarshal([]byte(browseResponse), &browse)
 	if err != nil {

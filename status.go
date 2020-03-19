@@ -1,17 +1,94 @@
 package vlcctrl
 
 import (
+	"encoding/json"
 	"errors"
 	"strconv"
 )
 
-// Status : Returns information of the instances' status. Among them:
-//     VLC status information, current item info and meta, VLC version and http api version
-//     Displays the equalizer band gains:
-//         Band 0: 60 Hz, 1: 170 Hz, 2: 310 Hz, 3: 600 Hz, 4: 1 kHz,
-//         5: 3 kHz, 6: 6 kHz, 7: 12 kHz , 8: 14 kHz , 9: 16 kHz
-//     Displays the list of presets available for the equalizer
-func (instance *VLC) Status() (response string, statusCode int, err error) {
+// Status contains
+type Status struct {
+	// TODO: The Status structure is still a work in progress
+	Fullscreen bool `json:"fullscreen"`
+	Stats      struct {
+		InputBitRate        float64 `json:"inputbitrate"`
+		SentBytes           uint    `json:"sentbytes"`
+		LosABuffers         uint    `json:"lostabuffers"`
+		AveragedEMuxBitrate float64 `json:"averagedemuxbitrate"`
+		ReadPackets         uint    `json:"readpackets"`
+		DemuxReadPackets    uint    `json:"demuxreadpackets"`
+		LostPictures        uint    `json:"lostpictures"`
+		DisplayedPictures   uint    `json:"displayedpictures"`
+		SentPackets         uint    `json:"sentpackets"`
+		DemuxReadBytes      uint    `json:"demuxreadbytes"`
+		DemuxBitRate        float64 `json:"demuxbitrate"`
+		PlayedABuffers      uint    `json:"playedabuffers"`
+		DemuxDiscontinuity  uint    `json:"demuxdiscontinuity"`
+		DecodeAudio         uint    `json:"decodedaudio"`
+		SendBitRate         float64 `json:"sendbitrate"`
+		ReadBytes           uint    `json:"readbytes"`
+		AverageInputBitRate float64 `json:"averageinputbitrate"`
+		DemuxCorrupted      uint    `json:"demuxcorrupted"`
+		DecodedVideo        uint    `json:"decodedvideo"`
+	} `json:"stats"`
+	AspectRatio  string            `json:"aspectratio"`
+	AudioDelay   float64           `json:"audiodelay"`
+	APIVersion   uint              `json:"apiversion"`
+	CurrentPlID  uint              `json:"currentplid"`
+	Time         uint              `json:"time"`
+	Volume       uint              `json:"volume"`
+	Length       uint              `json:"length"`
+	Random       bool              `json:"random"`
+	AudioFilters map[string]string `json:"audiofilters"`
+	Rate         float64           `json:"rate"`
+	VideoEffects struct {
+		Hue        int `json:"hue"`
+		Saturation int `json:"saturation"`
+		Contrast   int `json:"contrast"`
+		Brightness int `json:"brightness"`
+		Gamma      int `json:"gamma"`
+	} `json:"videoeffects"`
+	State       string  `json:"state"`
+	Loop        bool    `json:"loop"`
+	Version     string  `json:"version"`
+	Position    float64 `json:"position"`
+	Information struct {
+		Chapter int `json:"chapter"`
+		// TODO: Chapters definition might need to be changed
+		Chapters []interface{} `json:"chapters"`
+		Title    int           `json:"title"`
+		// TODO: Category definition might need to be updated/modified
+		Category map[string]struct {
+			Filename      string `json:"filename"`
+			Codec         string `json:"Codec"`
+			Channels      string `json:"Channels"`
+			BitsPerSample string `json:"Bits_per_sample"`
+			Type          string `json:"Type"`
+			SampleRate    string `json:"Sample_rate"`
+		} `json:"category"`
+		Titles []interface{} `json:"titles"`
+	} `json:"information"`
+	Repeat        bool    `json:"repeat"`
+	SubtitleDelay float64 `json:"subtitledelay"`
+	Equalizer     struct {
+		Presets map[string]string `json:"presets"`
+		Bands   map[string]string `json:"bands"`
+		Preamp  int               `json:"preamp"`
+	} `json:"equalizer"`
+}
+
+// ParseStatus parses GetStatus() responses to Status struct.
+func ParseStatus(statusResponse string) (status Status, err error) {
+	// TODO: For now only json responses are supported. Add XML parsing
+	err = json.Unmarshal([]byte(statusResponse), &status)
+	if err != nil {
+		return
+	}
+	return status, nil
+}
+
+// GetStatus returns information of the instances' status which can then be parsed to Status using ParseStatus()
+func (instance *VLC) GetStatus() (response string, statusCode int, err error) {
 	response, _, statusCode, err = instance.RequestMaker("/requests/status." + instance.Format)
 	return
 }

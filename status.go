@@ -6,75 +6,89 @@ import (
 	"strconv"
 )
 
-// Status contains
+// Status contains information related to the VLC instance status. Use parseStatus to parse the response from a
+// status.go function.
 type Status struct {
 	// TODO: The Status structure is still a work in progress
-	Fullscreen bool `json:"fullscreen"`
-	Stats      struct {
-		InputBitRate        float64 `json:"inputbitrate"`
-		SentBytes           uint    `json:"sentbytes"`
-		LosABuffers         uint    `json:"lostabuffers"`
-		AveragedEMuxBitrate float64 `json:"averagedemuxbitrate"`
-		ReadPackets         uint    `json:"readpackets"`
-		DemuxReadPackets    uint    `json:"demuxreadpackets"`
-		LostPictures        uint    `json:"lostpictures"`
-		DisplayedPictures   uint    `json:"displayedpictures"`
-		SentPackets         uint    `json:"sentpackets"`
-		DemuxReadBytes      uint    `json:"demuxreadbytes"`
-		DemuxBitRate        float64 `json:"demuxbitrate"`
-		PlayedABuffers      uint    `json:"playedabuffers"`
-		DemuxDiscontinuity  uint    `json:"demuxdiscontinuity"`
-		DecodeAudio         uint    `json:"decodedaudio"`
-		SendBitRate         float64 `json:"sendbitrate"`
-		ReadBytes           uint    `json:"readbytes"`
-		AverageInputBitRate float64 `json:"averageinputbitrate"`
-		DemuxCorrupted      uint    `json:"demuxcorrupted"`
-		DecodedVideo        uint    `json:"decodedvideo"`
-	} `json:"stats"`
-	AspectRatio  string            `json:"aspectratio"`
-	AudioDelay   float64           `json:"audiodelay"`
-	APIVersion   uint              `json:"apiversion"`
-	CurrentPlID  uint              `json:"currentplid"`
-	Time         uint              `json:"time"`
-	Volume       uint              `json:"volume"`
-	Length       uint              `json:"length"`
-	Random       bool              `json:"random"`
-	AudioFilters map[string]string `json:"audiofilters"`
-	Rate         float64           `json:"rate"`
-	VideoEffects struct {
-		Hue        int `json:"hue"`
-		Saturation int `json:"saturation"`
-		Contrast   int `json:"contrast"`
-		Brightness int `json:"brightness"`
-		Gamma      int `json:"gamma"`
-	} `json:"videoeffects"`
-	State       string  `json:"state"`
-	Loop        bool    `json:"loop"`
-	Version     string  `json:"version"`
-	Position    float64 `json:"position"`
-	Information struct {
-		Chapter int `json:"chapter"`
-		// TODO: Chapters definition might need to be changed
-		Chapters []interface{} `json:"chapters"`
-		Title    int           `json:"title"`
-		// TODO: Category definition might need to be updated/modified
-		Category map[string]struct {
-			Filename      string `json:"filename"`
-			Codec         string `json:"Codec"`
-			Channels      string `json:"Channels"`
-			BitsPerSample string `json:"Bits_per_sample"`
-			Type          string `json:"Type"`
-			SampleRate    string `json:"Sample_rate"`
-		} `json:"category"`
-		Titles []interface{} `json:"titles"`
-	} `json:"information"`
-	Repeat        bool    `json:"repeat"`
-	SubtitleDelay float64 `json:"subtitledelay"`
-	Equalizer     struct {
-		Presets map[string]string `json:"presets"`
-		Bands   map[string]string `json:"bands"`
-		Preamp  int               `json:"preamp"`
-	} `json:"equalizer"`
+	Fullscreen    bool              `json:"fullscreen"`
+	Stats         Stats             `json:"stats"`
+	AspectRatio   string            `json:"aspectratio"`
+	AudioDelay    float64           `json:"audiodelay"`
+	APIVersion    uint              `json:"apiversion"`
+	CurrentPlID   uint              `json:"currentplid"`
+	Time          uint              `json:"time"`
+	Volume        uint              `json:"volume"`
+	Length        uint              `json:"length"`
+	Random        bool              `json:"random"`
+	AudioFilters  map[string]string `json:"audiofilters"`
+	Rate          float64           `json:"rate"`
+	VideoEffects  VideoEffects      `json:"videoeffects"`
+	State         string            `json:"state"`
+	Loop          bool              `json:"loop"`
+	Version       string            `json:"version"`
+	Position      float64           `json:"position"`
+	Information   Information       `json:"information"`
+	Repeat        bool              `json:"repeat"`
+	SubtitleDelay float64           `json:"subtitledelay"`
+	Equalizer     Equalizer         `json:"equalizer"`
+}
+
+// Stats contains certain statistics of a VLC instance. A Stats variable is included in Status
+type Stats struct {
+	InputBitRate        float64 `json:"inputbitrate"`
+	SentBytes           uint    `json:"sentbytes"`
+	LosABuffers         uint    `json:"lostabuffers"`
+	AveragedEMuxBitrate float64 `json:"averagedemuxbitrate"`
+	ReadPackets         uint    `json:"readpackets"`
+	DemuxReadPackets    uint    `json:"demuxreadpackets"`
+	LostPictures        uint    `json:"lostpictures"`
+	DisplayedPictures   uint    `json:"displayedpictures"`
+	SentPackets         uint    `json:"sentpackets"`
+	DemuxReadBytes      uint    `json:"demuxreadbytes"`
+	DemuxBitRate        float64 `json:"demuxbitrate"`
+	PlayedABuffers      uint    `json:"playedabuffers"`
+	DemuxDiscontinuity  uint    `json:"demuxdiscontinuity"`
+	DecodeAudio         uint    `json:"decodedaudio"`
+	SendBitRate         float64 `json:"sendbitrate"`
+	ReadBytes           uint    `json:"readbytes"`
+	AverageInputBitRate float64 `json:"averageinputbitrate"`
+	DemuxCorrupted      uint    `json:"demuxcorrupted"`
+	DecodedVideo        uint    `json:"decodedvideo"`
+}
+
+// VideoEffects contains the current video effects configuration. A VideoEffects variable is included in Status
+type VideoEffects struct {
+	Hue        int `json:"hue"`
+	Saturation int `json:"saturation"`
+	Contrast   int `json:"contrast"`
+	Brightness int `json:"brightness"`
+	Gamma      int `json:"gamma"`
+}
+
+// VideoEffects contains information related to the item currently being played. An Information variable
+// is included in Status
+type Information struct {
+	Chapter int `json:"chapter"`
+	// TODO: Chapters definition might need to be changed
+	Chapters []interface{} `json:"chapters"`
+	Title    int           `json:"title"`
+	// TODO: Category definition might need to be updated/modified
+	Category map[string]struct {
+		Filename      string `json:"filename"`
+		Codec         string `json:"Codec"`
+		Channels      string `json:"Channels"`
+		BitsPerSample string `json:"Bits_per_sample"`
+		Type          string `json:"Type"`
+		SampleRate    string `json:"Sample_rate"`
+	} `json:"category"`
+	Titles []interface{} `json:"titles"`
+}
+
+// Equalizer contains information related to the equalizer configuration. An Equalizer variable is included in Status
+type Equalizer struct {
+	Presets map[string]string `json:"presets"`
+	Bands   map[string]string `json:"bands"`
+	Preamp  int               `json:"preamp"`
 }
 
 // ParseStatus parses GetStatus() responses to Status struct.

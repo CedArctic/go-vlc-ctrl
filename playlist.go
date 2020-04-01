@@ -24,8 +24,16 @@ func ParsePlaylist(playlistResponse string) (playlist Node, err error) {
 	return
 }
 
-// Returns the currently loaded playlists
-func (instance *VLC) Playlist() (response string, statusCode int, err error) {
-	response, _, statusCode, err = instance.RequestMaker("/requests/playlist.json")
+// Playlist returns a Node object that is the root node of VLC's Playlist tree
+// Playlist tree structure: Level 0 - Root Node (Type="node"), Level 1 - Playlists (Type="node"),
+// Level 2+: Playlist Items (Type="leaf") or Folder (Type="node")
+func (instance *VLC) Playlist() (playlist Node, err error) {
+	// Make response and check for errors
+	response, _, _, err := instance.RequestMaker("/requests/playlist.json")
+	if err != nil {
+		return
+	}
+	// Parse to node
+	playlist, err = ParsePlaylist(response)
 	return
 }

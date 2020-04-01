@@ -36,8 +36,8 @@ import (
 )
 
 func main(){
-	// Create instance of local VLC. Password is "password" and responses will be in json
-	myVLC, _ := vlcctrl.NewVLC("127.0.0.1", 8080, "password", "json")
+	// Create instance of local VLC with password "password"
+	myVLC, _ := vlcctrl.NewVLC("127.0.0.1", 8080, "password")
 
 	// Add items to playlist -  Note URIs are URL percent-encoded
 	myVLC.Add("file:///C:/Users/Jose/Music/Back%%20In%%20Black.mp3")

@@ -26,6 +26,6 @@ func ParsePlaylist(playlistResponse string) (playlist Node, err error) {
 
 // Returns the currently loaded playlists
 func (instance *VLC) Playlist() (response string, statusCode int, err error) {
-	response, _, statusCode, err = instance.RequestMaker("/requests/playlist." + instance.Format)
+	response, _, statusCode, err = instance.RequestMaker("/requests/playlist.json")
 	return
 }

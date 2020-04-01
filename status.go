@@ -93,7 +93,6 @@ type Equalizer struct {
 
 // ParseStatus parses GetStatus() responses to Status struct.
 func ParseStatus(statusResponse string) (status Status, err error) {
-	// TODO: For now only json responses are supported. Add XML parsing
 	err = json.Unmarshal([]byte(statusResponse), &status)
 	if err != nil {
 		return
@@ -103,7 +102,7 @@ func ParseStatus(statusResponse string) (status Status, err error) {
 
 // GetStatus returns information of the instances' status which can then be parsed to Status using ParseStatus()
 func (instance *VLC) GetStatus() (response string, statusCode int, err error) {
-	response, _, statusCode, err = instance.RequestMaker("/requests/status." + instance.Format)
+	response, _, statusCode, err = instance.RequestMaker("/requests/status.json")
 	return
 }
 
@@ -114,7 +113,7 @@ func (instance *VLC) Play(itemID ...int) (response string, statusCode int, err e
 		err = errors.New("please provide only up to one ID")
 		return
 	}
-	urlSegment := "/requests/status." + instance.Format + "?command=pl_play"
+	urlSegment := "/requests/status.json?command=pl_play"
 	if len(itemID) == 1 {
 		urlSegment = urlSegment + "&id=" + strconv.Itoa(itemID[0])
 	}
@@ -130,7 +129,7 @@ func (instance *VLC) Pause(itemID ...int) (response string, statusCode int, err 
 		err = errors.New("please provide only up to one ID")
 		return
 	}
-	urlSegment := "/requests/status." + instance.Format + "?command=pl_pause"
+	urlSegment := "/requests/status.json?command=pl_pause"
 	if len(itemID) == 1 {
 		urlSegment = urlSegment + "&id=" + strconv.Itoa(itemID[0])
 	}
@@ -140,49 +139,49 @@ func (instance *VLC) Pause(itemID ...int) (response string, statusCode int, err 
 
 // Stop Playback
 func (instance *VLC) Stop() (response string, statusCode int, err error) {
-	response, _, statusCode, err = instance.RequestMaker("/requests/status." + instance.Format + "?command=pl_stop")
+	response, _, statusCode, err = instance.RequestMaker("/requests/status.json?command=pl_stop")
 	return
 }
 
 // Next
 func (instance *VLC) Next() (response string, statusCode int, err error) {
-	response, _, statusCode, err = instance.RequestMaker("/requests/status." + instance.Format + "?command=pl_next")
+	response, _, statusCode, err = instance.RequestMaker("/requests/status.json?command=pl_next")
 	return
 }
 
 // Previous
 func (instance *VLC) Previous() (response string, statusCode int, err error) {
-	response, _, statusCode, err = instance.RequestMaker("/requests/status." + instance.Format + "?command=pl_previous")
+	response, _, statusCode, err = instance.RequestMaker("/requests/status.json?command=pl_previous")
 	return
 }
 
 // Empty Playlist
 func (instance *VLC) EmptyPlaylist() (response string, statusCode int, err error) {
-	response, _, statusCode, err = instance.RequestMaker("/requests/status." + instance.Format + "?command=pl_empty")
+	response, _, statusCode, err = instance.RequestMaker("/requests/status.json?command=pl_empty")
 	return
 }
 
 // Random Playback Toggle
 func (instance *VLC) ToggleLoop() (response string, statusCode int, err error) {
-	response, _, statusCode, err = instance.RequestMaker("/requests/status." + instance.Format + "?command=pl_random")
+	response, _, statusCode, err = instance.RequestMaker("/requests/status.json?command=pl_random")
 	return
 }
 
 // Playback Looping Toggle
 func (instance *VLC) ToggleRepeat() (response string, statusCode int, err error) {
-	response, _, statusCode, err = instance.RequestMaker("/requests/status." + instance.Format + "?command=pl_loop")
+	response, _, statusCode, err = instance.RequestMaker("/requests/status.json?command=pl_loop")
 	return
 }
 
 // Playback Repeat Toggle
 func (instance *VLC) ToggleRandom() (response string, statusCode int, err error) {
-	response, _, statusCode, err = instance.RequestMaker("/requests/status." + instance.Format + "?command=pl_repeat")
+	response, _, statusCode, err = instance.RequestMaker("/requests/status.json?command=pl_repeat")
 	return
 }
 
 // Fullscreen Toggle
 func (instance *VLC) ToggleFullscreen() (response string, statusCode int, err error) {
-	response, _, statusCode, err = instance.RequestMaker("/requests/status." + instance.Format + "?command=fullscreen")
+	response, _, statusCode, err = instance.RequestMaker("/requests/status.json?command=fullscreen")
 	return
 }
 
@@ -193,7 +192,7 @@ func (instance *VLC) AddStart(uri string, option ...string) (response string, st
 		err = errors.New("please provide only one option")
 		return
 	}
-	urlSegment := "/requests/status." + instance.Format + "?command=in_play&input=" + uri
+	urlSegment := "/requests/status.json?command=in_play&input=" + uri
 	if len(option) == 1 {
 		if (option[0] != "noaudio") && (option[0] != "novideo") {
 			err = errors.New("invalid option")
@@ -207,43 +206,43 @@ func (instance *VLC) AddStart(uri string, option ...string) (response string, st
 
 // Add URI to playlist
 func (instance *VLC) Add(uri string) (response string, statusCode int, err error) {
-	response, _, statusCode, err = instance.RequestMaker("/requests/status." + instance.Format + "?command=in_enqueue&input=" + uri)
+	response, _, statusCode, err = instance.RequestMaker("/requests/status.json?command=in_enqueue&input=" + uri)
 	return
 }
 
 // Add subtitle from URI to currently playing file
 func (instance *VLC) AddSubtitle(uri string) (response string, statusCode int, err error) {
-	response, _, statusCode, err = instance.RequestMaker("/requests/status." + instance.Format + "?command=addsubtitle&val=" + uri)
+	response, _, statusCode, err = instance.RequestMaker("/requests/status.json?command=addsubtitle&val=" + uri)
 	return
 }
 
 // Resume playback if paused, else do nothing
 func (instance *VLC) Resume() (response string, statusCode int, err error) {
-	response, _, statusCode, err = instance.RequestMaker("/requests/status." + instance.Format + "?command=pl_forceresume")
+	response, _, statusCode, err = instance.RequestMaker("/requests/status.json?command=pl_forceresume")
 	return
 }
 
 // Pause playback, do nothing if already paused
 func (instance *VLC) ForcePause() (response string, statusCode int, err error) {
-	response, _, statusCode, err = instance.RequestMaker("/requests/status." + instance.Format + "?command=pl_forcepause")
+	response, _, statusCode, err = instance.RequestMaker("/requests/status.json?command=pl_forcepause")
 	return
 }
 
 // Delete item with given id from playlist
 func (instance *VLC) Delete(id int) (response string, statusCode int, err error) {
-	response, _, statusCode, err = instance.RequestMaker("/requests/status." + instance.Format + "?command=pl_delete&id=" + strconv.Itoa(id))
+	response, _, statusCode, err = instance.RequestMaker("/requests/status.json?command=pl_delete&id=" + strconv.Itoa(id))
 	return
 }
 
 // Set Audio Delay in seconds
 func (instance *VLC) AudioDelay(delay float64) (response string, statusCode int, err error) {
-	response, _, statusCode, err = instance.RequestMaker("/requests/status." + instance.Format + "?command=audiodelay&val=" + strconv.FormatFloat(delay, 'f', -1, 64))
+	response, _, statusCode, err = instance.RequestMaker("/requests/status.json?command=audiodelay&val=" + strconv.FormatFloat(delay, 'f', -1, 64))
 	return
 }
 
 // Set Subtitle Delay in seconds
 func (instance *VLC) SubDelay(delay float64) (response string, statusCode int, err error) {
-	response, _, statusCode, err = instance.RequestMaker("/requests/status." + instance.Format + "?command=subdelay&val=" + strconv.FormatFloat(delay, 'f', -1, 64))
+	response, _, statusCode, err = instance.RequestMaker("/requests/status.json?command=subdelay&val=" + strconv.FormatFloat(delay, 'f', -1, 64))
 	return
 }
 
@@ -253,14 +252,14 @@ func (instance *VLC) PlaybackRate(rate float64) (response string, statusCode int
 		err = errors.New("rate must be greater than 0")
 		return
 	}
-	response, _, statusCode, err = instance.RequestMaker("/requests/status." + instance.Format + "?command=rate&val=" + strconv.FormatFloat(rate, 'f', -1, 64))
+	response, _, statusCode, err = instance.RequestMaker("/requests/status.json?command=rate&val=" + strconv.FormatFloat(rate, 'f', -1, 64))
 	return
 }
 
 // Set aspect ratio. Must be one of the following values. Any other value will reset aspect ratio to default.
 // Valid aspect ratio values: 1:1 , 4:3 , 5:4 , 16:9 , 16:10 , 221:100 , 235:100 , 239:100
 func (instance *VLC) AspectRatio(ratio string) (response string, statusCode int, err error) {
-	response, _, statusCode, err = instance.RequestMaker("/requests/status." + instance.Format + "?command=aspectratio&val=" + ratio)
+	response, _, statusCode, err = instance.RequestMaker("/requests/status.json?command=aspectratio&val=" + ratio)
 	return
 }
 
@@ -272,21 +271,21 @@ func (instance *VLC) Sort(id int, val int) (response string, statusCode int, err
 		err = errors.New("sorting order must be 0 or 1")
 		return
 	}
-	response, _, statusCode, err = instance.RequestMaker("/requests/status." + instance.Format + "?command=pl_sort&id=" + strconv.Itoa(id) + "&val=" + strconv.Itoa(val))
+	response, _, statusCode, err = instance.RequestMaker("/requests/status.json?command=pl_sort&id=" + strconv.Itoa(id) + "&val=" + strconv.Itoa(val))
 	return
 }
 
 // Toggle enable service discovery module <val>.
 // Typical values are: sap shoutcast, podcast, hal
 func (instance *VLC) ToggleSD(val string) (response string, statusCode int, err error) {
-	response, _, statusCode, err = instance.RequestMaker("/requests/status." + instance.Format + "?command=pl_sd&val=" + val)
+	response, _, statusCode, err = instance.RequestMaker("/requests/status.json?command=pl_sd&val=" + val)
 	return
 }
 
 // Set Volume level <val> (can be absolute integer, or +/- relative value). Percentage isn't working at the moment.
 // Allowed values are of the form: +<int>, -<int>, <int> or <int>%
 func (instance *VLC) Volume(val string) (response string, statusCode int, err error) {
-	response, _, statusCode, err = instance.RequestMaker("/requests/status." + instance.Format + "?command=volume&val=" + val)
+	response, _, statusCode, err = instance.RequestMaker("/requests/status.json?command=volume&val=" + val)
 	return
 }
 
@@ -300,7 +299,7 @@ func (instance *VLC) Volume(val string) (response string, statusCode int, err er
 //    +1H:2M -> seek 1 hour and 2 minutes forward
 //    -10% -> seek 10% back
 func (instance *VLC) Seek(val string) (response string, statusCode int, err error) {
-	response, _, statusCode, err = instance.RequestMaker("/requests/status." + instance.Format + "?command=seek&val=" + val)
+	response, _, statusCode, err = instance.RequestMaker("/requests/status.json?command=seek&val=" + val)
 	return
 }
 
@@ -310,7 +309,7 @@ func (instance *VLC) Preamp(gain int) (response string, statusCode int, err erro
 		err = errors.New("preamp must be between -20 and 20")
 		return
 	}
-	response, _, statusCode, err = instance.RequestMaker("/requests/status." + instance.Format + "?command=preamp&val=" + strconv.Itoa(gain))
+	response, _, statusCode, err = instance.RequestMaker("/requests/status.json?command=preamp&val=" + strconv.Itoa(gain))
 	return
 }
 
@@ -320,7 +319,7 @@ func (instance *VLC) SetEQ(band int, gain int) (response string, statusCode int,
 		err = errors.New("gain must be between -20 and 20")
 		return
 	}
-	response, _, statusCode, err = instance.RequestMaker("/requests/status." + instance.Format + "?command=equalizer&band=" + strconv.Itoa(band) + "&val=" + strconv.Itoa(gain))
+	response, _, statusCode, err = instance.RequestMaker("/requests/status.json?command=equalizer&band=" + strconv.Itoa(band) + "&val=" + strconv.Itoa(gain))
 	return
 }
 
@@ -330,42 +329,42 @@ func (instance *VLC) ToggleEQ(enable bool) (response string, statusCode int, err
 	if enable == true {
 		enableStr = "1"
 	}
-	response, _, statusCode, err = instance.RequestMaker("/requests/status." + instance.Format + "?command=enableeq&val=" + enableStr)
+	response, _, statusCode, err = instance.RequestMaker("/requests/status.json?command=enableeq&val=" + enableStr)
 	return
 }
 
 // Set the equalizer preset as per the id specified
 func (instance *VLC) SetEQPreset(id int) (response string, statusCode int, err error) {
-	response, _, statusCode, err = instance.RequestMaker("/requests/status." + instance.Format + "?command=setpreset&id=" + strconv.Itoa(id))
+	response, _, statusCode, err = instance.RequestMaker("/requests/status.json?command=setpreset&id=" + strconv.Itoa(id))
 	return
 }
 
 // Select the title using the title number
 func (instance *VLC) SelectTitle(id int) (response string, statusCode int, err error) {
-	response, _, statusCode, err = instance.RequestMaker("/requests/status." + instance.Format + "?command=title&val=" + strconv.Itoa(id))
+	response, _, statusCode, err = instance.RequestMaker("/requests/status.json?command=title&val=" + strconv.Itoa(id))
 	return
 }
 
 // Select chapter using the chapter number
 func (instance *VLC) SelectChapter(id int) (response string, statusCode int, err error) {
-	response, _, statusCode, err = instance.RequestMaker("/requests/status." + instance.Format + "?command=chapter&val=" + strconv.Itoa(id))
+	response, _, statusCode, err = instance.RequestMaker("/requests/status.json?command=chapter&val=" + strconv.Itoa(id))
 	return
 }
 
 // Select the audio track (use the number from the stream)
 func (instance *VLC) SelectAudioTrack(id int) (response string, statusCode int, err error) {
-	response, _, statusCode, err = instance.RequestMaker("/requests/status." + instance.Format + "?command=audio_track&val=" + strconv.Itoa(id))
+	response, _, statusCode, err = instance.RequestMaker("/requests/status.json?command=audio_track&val=" + strconv.Itoa(id))
 	return
 }
 
 // Select the video track (use the number from the stream)
 func (instance *VLC) SelectVideoTrack(id int) (response string, statusCode int, err error) {
-	response, _, statusCode, err = instance.RequestMaker("/requests/status." + instance.Format + "?command=video_track&val=" + strconv.Itoa(id))
+	response, _, statusCode, err = instance.RequestMaker("/requests/status.json?command=video_track&val=" + strconv.Itoa(id))
 	return
 }
 
 // Select the subtitle track (use the number from the stream)
 func (instance *VLC) SelectSubtitleTrack(id int) (response string, statusCode int, err error) {
-	response, _, statusCode, err = instance.RequestMaker("/requests/status." + instance.Format + "?command=subtitle_track&val=" + strconv.Itoa(id))
+	response, _, statusCode, err = instance.RequestMaker("/requests/status.json?command=subtitle_track&val=" + strconv.Itoa(id))
 	return
 }

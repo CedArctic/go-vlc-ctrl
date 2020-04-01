@@ -15,18 +15,10 @@ type VLC struct {
 	Port     int
 	Password string
 	BaseURL  string // combination of IP and Port
-	Format   string // json or xml
 }
 
-// NewVLC() builds and returns a VLC struct using the IP, Port and Password of the VLC instance as well as the format
-// in which responses will be returned: xml or json
-func NewVLC(ip string, port int, password string, format string) (VLC, error) {
-
-	// Check if format is invalid
-	if (format != "xml") && (format != "json") {
-		err := errors.New("format can only be json or xml")
-		return VLC{}, err
-	}
+// NewVLC builds and returns a VLC struct using the IP, Port and Password of the VLC instance
+func NewVLC(ip string, port int, password string) (VLC, error) {
 
 	// Form instance Base URL
 	var BaseURL strings.Builder
@@ -36,7 +28,7 @@ func NewVLC(ip string, port int, password string, format string) (VLC, error) {
 	BaseURL.WriteString(strconv.Itoa(port))
 
 	// Create and return instance struct
-	return VLC{ip, port, password, BaseURL.String(), format}, nil
+	return VLC{ip, port, password, BaseURL.String()}, nil
 }
 
 // RequestMaker make requests to VLC using a urlSegment provided by other functions
@@ -57,7 +49,9 @@ func (instance *VLC) RequestMaker(urlSegment string) (response string, byteArr [
 		err = errors.New(fmt.Sprintf("http response error: %s\n", reqErr))
 		return
 	}
-	defer reqResponse.Body.Close()
+	defer func() {
+		err = reqResponse.Body.Close()
+	}()
 
 	// Get byte response and http status code
 	var readErr error

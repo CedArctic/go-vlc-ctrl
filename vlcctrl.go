@@ -53,6 +53,13 @@ func (instance *VLC) RequestMaker(urlSegment string) (response string, byteArr [
 		err = reqResponse.Body.Close()
 	}()
 
+	// Check HTTP status code and errors
+	statusCode = reqResponse.StatusCode
+	if !((statusCode >= 200) && (statusCode <= 299)) {
+		err = errors.New(fmt.Sprintf("http error code: %s\n", statusCode))
+		return
+	}
+
 	// Get byte response and http status code
 	var readErr error
 	byteArr, readErr = ioutil.ReadAll(reqResponse.Body)
@@ -61,9 +68,8 @@ func (instance *VLC) RequestMaker(urlSegment string) (response string, byteArr [
 		return
 	}
 
-	// Write response and http status code
+	// Write response
 	response = string(byteArr)
-	statusCode = reqResponse.StatusCode
 
 	return
 }

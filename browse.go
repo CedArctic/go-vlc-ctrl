@@ -19,11 +19,15 @@ type File struct {
 
 // ParseBrowse parses Browse() responses to []File
 func ParseBrowse(browseResponse string) (files []File, err error) {
-	err = json.Unmarshal([]byte(browseResponse), &files)
+	var temp struct {
+		Files []File `json:"element"`
+	}
+	err = json.Unmarshal([]byte(browseResponse), &temp)
+	files = temp.Files
 	return
 }
 
-// Browse returns a []File array with the items of the provided directory URI
+// Browse returns a File array with the items of the provided directory URI
 func (instance *VLC) Browse(uri string) (files []File, err error) {
 	var response string
 	response, _, _, err = instance.RequestMaker("/requests/browse.json?uri=" + uri)

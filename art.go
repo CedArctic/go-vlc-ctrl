@@ -6,7 +6,8 @@ import (
 )
 
 // Art fetches cover art based on a playlist item's ID. If no ID is provided, Art returns the current item's cover art.
-func (instance *VLC) Art(itemID ...int) (byteArr []byte, statusCode int, err error) {
+// Cover art is returned in the form of a byte array.
+func (instance *VLC) Art(itemID ...int) (byteArr []byte, err error) {
 
 	// Check variadic arguments
 	if len(itemID) > 1 {
@@ -22,7 +23,7 @@ func (instance *VLC) Art(itemID ...int) (byteArr []byte, statusCode int, err err
 
 	// Make request
 	var response string
-	response, byteArr, statusCode, err = instance.RequestMaker(urlSegment)
+	response, _, _, err = instance.RequestMaker(urlSegment)
 
 	// Error Handling
 	if err != nil {
@@ -30,6 +31,11 @@ func (instance *VLC) Art(itemID ...int) (byteArr []byte, statusCode int, err err
 	}
 	if response == "Error" {
 		err = errors.New("no cover art available for item")
+		return
 	}
+
+	// Convert response to byte array
+	byteArr = []byte(response)
+
 	return
 }

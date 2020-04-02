@@ -1,13 +1,12 @@
 package vlcctrl
 
-import (
-	"encoding/json"
-)
+import "encoding/json"
 
-// Element represents a single item in the browse directory
-type Element struct {
-	ItemType         string `json:"type"`
+// File struct represents a single item in the browsed directory. Can be a file or a dir
+type File struct {
+	Type             string `json:"type"` // file or dir
 	Path             string `json:"path"`
+	Name             string `json:"name"`
 	AccessTime       uint   `json:"access_time"`
 	UID              uint   `json:"uid"`
 	CreationTime     uint   `json:"creation_time"`
@@ -18,24 +17,19 @@ type Element struct {
 	Size             uint   `json:"size"`
 }
 
-// Browse is an intermediate structure used for parsing Element structs
-type Browse struct {
-	Elements []Element `json:"element"`
-}
-
-// Browse directory of provided URI
-func (instance *VLC) Browse(uri string) (response string, statusCode int, err error) {
-	response, _, statusCode, err = instance.RequestMaker("/requests/browse.json?uri=" + uri)
+// ParseBrowse parses Browse() responses to []File
+func ParseBrowse(browseResponse string) (files []File, err error) {
+	err = json.Unmarshal([]byte(browseResponse), &files)
 	return
 }
 
-// ParseBrowse parses Browse() responses to []Element
-func ParseBrowse(browseResponse string) (files []Element, err error) {
-	var browse Browse
-	err = json.Unmarshal([]byte(browseResponse), &browse)
+// Browse returns a []File array with the items of the provided directory URI
+func (instance *VLC) Browse(uri string) (files []File, err error) {
+	var response string
+	response, _, _, err = instance.RequestMaker("/requests/browse.json?uri=" + uri)
 	if err != nil {
 		return
 	}
-	files = browse.Elements
-	return files, nil
+	files, err = ParseBrowse(response)
+	return
 }

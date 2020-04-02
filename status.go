@@ -100,9 +100,17 @@ func ParseStatus(statusResponse string) (status Status, err error) {
 	return status, nil
 }
 
-// GetStatus returns information of the instances' status which can then be parsed to Status using ParseStatus()
-func (instance *VLC) GetStatus() (response string, statusCode int, err error) {
-	response, _, statusCode, err = instance.RequestMaker("/requests/status.json")
+// GetStatus returns a Status object containing information of the instances' status
+func (instance *VLC) GetStatus() (status Status, err error) {
+	// Make request
+	var response string
+	response, _, _, err = instance.RequestMaker("/requests/status.json")
+	// Error handling
+	if err != nil {
+		return
+	}
+	// Parse response to Status
+	status, err = ParseStatus(response)
 	return
 }
 

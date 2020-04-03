@@ -32,7 +32,7 @@ func NewVLC(ip string, port int, password string) (VLC, error) {
 }
 
 // RequestMaker make requests to VLC using a urlSegment provided by other functions
-func (instance *VLC) RequestMaker(urlSegment string) (response string, byteArr []byte, statusCode int, err error) {
+func (instance *VLC) RequestMaker(urlSegment string) (response string, err error) {
 
 	// Form a GET Request
 	client := &http.Client{}
@@ -54,17 +54,16 @@ func (instance *VLC) RequestMaker(urlSegment string) (response string, byteArr [
 	}()
 
 	// Check HTTP status code and errors
-	statusCode = reqResponse.StatusCode
+	statusCode := reqResponse.StatusCode
 	if !((statusCode >= 200) && (statusCode <= 299)) {
 		err = errors.New(fmt.Sprintf("http error code: %s\n", statusCode))
 		return
 	}
 
 	// Get byte response and http status code
-	var readErr error
-	byteArr, readErr = ioutil.ReadAll(reqResponse.Body)
+	byteArr, readErr := ioutil.ReadAll(reqResponse.Body)
 	if readErr != nil {
-		err = errors.New(fmt.Sprintf("error reading response: %s\n", reqErr))
+		err = errors.New(fmt.Sprintf("error reading response: %s\n", readErr))
 		return
 	}
 

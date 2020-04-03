@@ -29,7 +29,7 @@ func ParsePlaylist(playlistResponse string) (playlist Node, err error) {
 // Level 2+: Playlist Items (Type="leaf") or Folder (Type="node")
 func (instance *VLC) Playlist() (playlist Node, err error) {
 	// Make response and check for errors
-	response, _, _, err := instance.RequestMaker("/requests/playlist.json")
+	response, err := instance.RequestMaker("/requests/playlist.json")
 	if err != nil {
 		return
 	}

@@ -30,7 +30,7 @@ func ParseBrowse(browseResponse string) (files []File, err error) {
 // Browse returns a File array with the items of the provided directory URI
 func (instance *VLC) Browse(uri string) (files []File, err error) {
 	var response string
-	response, _, _, err = instance.RequestMaker("/requests/browse.json?uri=" + uri)
+	response, err = instance.RequestMaker("/requests/browse.json?uri=" + uri)
 	if err != nil {
 		return
 	}

@@ -23,7 +23,7 @@ func (instance *VLC) Art(itemID ...int) (byteArr []byte, err error) {
 
 	// Make request
 	var response string
-	response, _, _, err = instance.RequestMaker(urlSegment)
+	response, err = instance.RequestMaker(urlSegment)
 
 	// Error Handling
 	if err != nil {

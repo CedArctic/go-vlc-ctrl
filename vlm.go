@@ -16,7 +16,7 @@ func (instance *VLC) VlmCmd(cmd string) (response string, err error) {
 	return
 }
 
-// VlmCmrErr returns the last VLM Error
+// VlmCmdErr returns the last VLM Error
 func (instance *VLC) VlmCmdErr() (response string, err error) {
 	response, err = instance.RequestMaker("/requests/vlm_cmd.xml")
 	return

@@ -15,7 +15,7 @@ A simple yet powerful module that allows you to control VLC instances over the V
 ## Installation
 Make sure you have Go installed and just open up a terminal window and run:
 ```bash
-go get github.com/adrg/libvlc-go/v3
+go get github.com/CedArctic/go-vlc-ctrl
 ```
 
 ## Example

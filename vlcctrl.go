@@ -1,7 +1,6 @@
 package vlcctrl
 
 import (
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -38,7 +37,7 @@ func (instance *VLC) RequestMaker(urlSegment string) (response string, err error
 	client := &http.Client{}
 	request, reqErr := http.NewRequest("GET", instance.BaseURL+urlSegment, nil)
 	if reqErr != nil {
-		err = errors.New(fmt.Sprintf("http request error: %s\n", reqErr))
+		err = fmt.Errorf("http request error: %s\n", reqErr)
 		return
 	}
 
@@ -46,7 +45,7 @@ func (instance *VLC) RequestMaker(urlSegment string) (response string, err error
 	request.SetBasicAuth("", instance.Password)
 	reqResponse, resErr := client.Do(request)
 	if resErr != nil {
-		err = errors.New(fmt.Sprintf("http response error: %s\n", reqErr))
+		err = fmt.Errorf("http response error: %s\n", reqErr)
 		return
 	}
 	defer func() {
@@ -56,14 +55,14 @@ func (instance *VLC) RequestMaker(urlSegment string) (response string, err error
 	// Check HTTP status code and errors
 	statusCode := reqResponse.StatusCode
 	if !((statusCode >= 200) && (statusCode <= 299)) {
-		err = errors.New(fmt.Sprintf("http error code: %s\n", statusCode))
+		err = fmt.Errorf("http error code: %s\n", statusCode)
 		return
 	}
 
 	// Get byte response and http status code
 	byteArr, readErr := ioutil.ReadAll(reqResponse.Body)
 	if readErr != nil {
-		err = errors.New(fmt.Sprintf("error reading response: %s\n", readErr))
+		err = fmt.Errorf("error reading response: %s\n", readErr)
 		return
 	}
 

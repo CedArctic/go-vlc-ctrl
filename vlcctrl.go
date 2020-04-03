@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-// The VLC struct represents an http interface enabled VLC instance. Build using NewVLC()
+// VLC struct represents an http interface enabled VLC instance. Build using NewVLC()
 type VLC struct {
 	IP       string
 	Port     int

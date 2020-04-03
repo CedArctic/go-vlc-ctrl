@@ -36,14 +36,14 @@ import (
 )
 
 func main(){
-	// Create instance of local VLC with password "password"
+	// Declare a local VLC instance on port 8080 with password "password"
 	myVLC, _ := vlcctrl.NewVLC("127.0.0.1", 8080, "password")
 
-	// Add items to playlist -  Note URIs are URL percent-encoded
+	// Add items to playlist. Note URIs are URL percent-encoded
 	myVLC.Add("file:///C:/Users/Jose/Music/Back%%20In%%20Black.mp3")
 	myVLC.Add("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
 
-	// Play first item for 10 seconds
+	// Play first item and wait for 10 seconds
 	myVLC.Play()
 	time.Sleep(10 * time.Second)
 	
@@ -57,15 +57,12 @@ func main(){
 
 
 ## Documentation
-You can find documentation of all functions on [Go.dev](https://pkg.go.dev/github.com/CedArctic/go-vlc-ctrl) or
-[GoDoc](https://godoc.org/github.com/CedArctic/go-vlc-ctrl). 
+You can find documentation of all functions on [GoDoc](https://godoc.org/github.com/CedArctic/go-vlc-ctrl) 
+or [Go.dev](https://pkg.go.dev/github.com/CedArctic/go-vlc-ctrl).
 
 The module fully covers the VLC Web API as documented 
 [here](https://github.com/videolan/vlc/blob/master/share/lua/http/requests/README.txt).
 
-All functions share a common return signature: ```(response string, statusCode int, err error)```. The response string 
-is the server response (in json or xml) to the request made, statusCode is the HTTP Status Code (e.g: 200-OK) and err 
-contains errors encountered during the execution of the function.
 
 ## Contributing
 Contributions to the project in any way are welcome

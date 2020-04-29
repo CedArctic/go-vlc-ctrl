@@ -39,9 +39,10 @@ func main(){
 	// Declare a local VLC instance on port 8080 with password "password"
 	myVLC, _ := vlcctrl.NewVLC("127.0.0.1", 8080, "password")
 
-	// Add items to playlist. Note URIs are URL percent-encoded
+	// Add items to playlist. Note URIs are URL percent-encoded 
+	// Warning: YouTube URLs have a = that needs to be changed to %3D (percent-encoding)
 	myVLC.Add("file:///C:/Users/Jose/Music/Back%%20In%%20Black.mp3")
-	myVLC.Add("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
+	myVLC.Add("https://www.youtube.com/watch?v%3DdQw4w9WgXcQ")
 
 	// Play first item and wait for 10 seconds
 	myVLC.Play()

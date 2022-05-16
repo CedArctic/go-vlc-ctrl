@@ -10,12 +10,12 @@ import (
 // status.go function.
 type Status struct {
 	// TODO: The Status structure is still a work in progress
-	Fullscreen    bool              `json:"fullscreen"`
+	Fullscreen    uint              `json:"fullscreen"`
 	Stats         Stats             `json:"stats"`
 	AspectRatio   string            `json:"aspectratio"`
 	AudioDelay    float64           `json:"audiodelay"`
 	APIVersion    uint              `json:"apiversion"`
-	CurrentPlID   uint              `json:"currentplid"`
+	CurrentPlID   int               `json:"currentplid"`
 	Time          uint              `json:"time"`
 	Volume        uint              `json:"volume"`
 	Length        uint              `json:"length"`
@@ -30,7 +30,7 @@ type Status struct {
 	Information   Information       `json:"information"`
 	Repeat        bool              `json:"repeat"`
 	SubtitleDelay float64           `json:"subtitledelay"`
-	Equalizer     Equalizer         `json:"equalizer"`
+	Equalizer     []Equalizer       `json:"equalizer"`
 }
 
 // Stats contains certain statistics of a VLC instance. A Stats variable is included in Status

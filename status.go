@@ -168,21 +168,21 @@ func (instance *VLC) EmptyPlaylist() (err error) {
 	return
 }
 
-// ToggleLoop toggles Random Playback
+// ToggleLoop toggles Playback Looping
 func (instance *VLC) ToggleLoop() (err error) {
-	_, err = instance.RequestMaker("/requests/status.json?command=pl_random")
-	return
-}
-
-// ToggleRepeat toggles Playback Looping
-func (instance *VLC) ToggleRepeat() (err error) {
 	_, err = instance.RequestMaker("/requests/status.json?command=pl_loop")
 	return
 }
 
-// ToggleRandom toggles Repeat
-func (instance *VLC) ToggleRandom() (err error) {
+// ToggleRepeat toggles Repeat
+func (instance *VLC) ToggleRepeat() (err error) {
 	_, err = instance.RequestMaker("/requests/status.json?command=pl_repeat")
+	return
+}
+
+// ToggleRandom toggles Random Playback
+func (instance *VLC) ToggleRandom() (err error) {
+	_, err = instance.RequestMaker("/requests/status.json?command=pl_random")
 	return
 }
 
